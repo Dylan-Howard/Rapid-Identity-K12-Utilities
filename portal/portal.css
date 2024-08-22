@@ -1,0 +1,76 @@
+:root {
+  --color-background-primary: #EDF2F7;
+  --color-background-surface: #FFFFFC;
+
+  --color-button-border: #CBCAC8;
+
+  --color-primary-1: #131F2A;
+  --color-primary-2: #203446;
+  --color-primary-3: #445963;
+}
+
+.cs-header,
+.need-help-link { display: none; }
+.cs-wrapper { padding: 0; }
+.cs-wrapper .content {
+  background-color: var(--color-background-primary);
+  display: flex;
+}
+.cs-container {
+  background-color: var(--color-background-surface);
+  border-radius: 8px;
+  padding: 42px;
+  box-shadow:
+    0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+    0 6.7px 5.3px rgba(0, 0, 0, 0.048),
+    0 12.5px 10px rgba(0, 0, 0, 0.06),
+    0 22.3px 17.9px rgba(0, 0, 0, 0.072),
+    0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+    0 100px 80px rgba(0, 0, 0, 0.12);
+}
+.cs-login-logo { height: 120px; }
+.cs-login-container input {
+  border: 1px solid var(--color-button-border);
+  border-radius: 4px;
+}
+.forgot-username-link-container a { color: var(--color-primary-2); }
+.cs-login-select {
+  border: 1px solid var(--color-button-border);
+  border-radius: 4px;
+  color: var(--color-primary-3);
+  font-family: 'Roboto Condensed', sans-serif;
+  font-size: 16px;
+  font-weight: 300;
+  margin-bottom: 15px;
+  height: 30px;
+  padding-left: 9px;
+  padding-right: 10px;
+}
+.content .claim-account-text {
+  margin-top: 48px;
+  text-align: left;
+}
+.cs-button {
+  background-color: var(--color-primary-1);
+  color: var(--color-background-surface);
+  -webkit-transition: background-color .2s;
+  -moz-transition: background-color .2s;
+  -ms-transition: background-color .2s;
+  transition: background-color .2s;
+}
+.cs-button:hover { background-color: var(--color-primary-2); }
+.cs-button-aslink {
+  -webkit-transition: background-color .2s;
+  -moz-transition: background-color .2s;
+  -ms-transition: background-color .2s;
+  transition: background-color .2s;
+}
+#authn-qr-button,
+#authn-claim-button {
+  background: none;
+  background-color: var(--color-background-surface);
+  border: 1px solid var(--color-button-border);
+  color: var(--color-primary-1);
+}
+#authn-qr-button:hover,
+#authn-claim-button:hover { background-color: var(--color-background-primary); }
