@@ -57,29 +57,29 @@ function appendDomainSelect() {
     setTimeout(appendDomainSelect, 100);
   }
 }
+appendDomainSelect();
 
-function updateRequestHandler() {
-  const httpSend = XMLHttpRequest.prototype.send;
+/* Updates http send request */
+const httpSend = XMLHttpRequest.prototype.send;
 
-  XMLHttpRequest.prototype.send = function(body) {
-    const data = JSON.parse(body);
+XMLHttpRequest.prototype.send = function(body) {
+  const data = JSON.parse(body);
 
-    /* Appends the domain to the username */
-    if (data && data.username) {
-      const domainInput = document.getElementById('domain-select');
+  if (data && data.username) {
+    const domainInput = document.getElementById('domain-select');
 
-      if (domainInput && domainInput.value != '') {
+    if (domainInput) {
+      if (domainInput.value != '') {
+        /* Find the end index of the username */
         const atIndex = data.username.indexOf('@');
         const usernameEndIndex = atIndex === -1 ? data.username.length : atIndex;
-
+        
+        /* Appends the domain to the username */
         data.username = data.username.substring(0, usernameEndIndex) + domainInput.value;
+        body = JSON.stringify(data);
       }
     }
-
-    httpSend.apply(this, arguments);
   }
-}
 
-/* Calls functions */
-appendDomainSelect();
-updateRequestHandler();
+  httpSend.apply(this, arguments);
+}

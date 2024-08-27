@@ -7,6 +7,9 @@
   --color-primary-1: #131F2A;
   --color-primary-2: #203446;
   --color-primary-3: #445963;
+
+  -color-alert-1: #DC5E41;
+  -color-alert-2: #FCF0EE;
 }
 
 .cs-header,
@@ -74,3 +77,29 @@
 }
 #authn-qr-button:hover,
 #authn-claim-button:hover { background-color: var(--color-background-primary); }
+
+#authn-login-form .error-message { display: flex; }
+
+#authn-login-form .error-message .cs-error {
+  background-color: var(-color-alert-1);
+  border: 1px solid #DC5E41;
+  color: var(-color-alert-2);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+@media (max-height: 540px) {
+  #authn-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    max-width: none;
+  }
+  }
+  .cs-login-logo {
+    height: 120px;
+    width: 120px;
+    margin: auto 32px auto 0;
+  }
+}
