@@ -60,25 +60,26 @@ function appendDomainSelect() {
 appendDomainSelect();
 
 /* Updates http send request */
-const httpSend = XMLHttpRequest.prototype.send;
+let selectedDomain = '';
 
+const httpSend = XMLHttpRequest.prototype.send;
 XMLHttpRequest.prototype.send = function(body) {
   const data = JSON.parse(body);
 
   if (data && data.username) {
     const domainInput = document.getElementById('domain-select');
 
-    if (domainInput) {
-      if (domainInput.value != '') {
-        /* Find the end index of the username */
-        const atIndex = data.username.indexOf('@');
-        const usernameEndIndex = atIndex === -1 ? data.username.length : atIndex;
-        
-        /* Appends the domain to the username */
-        data.username = data.username.substring(0, usernameEndIndex) + domainInput.value;
-        body = JSON.stringify(data);
-      }
+    if (domainInput && domainInput.value != '') {
+      selectedDomain = domainInput.value;
     }
+
+    /* Find the end index of the username */
+    const atIndex = data.username.indexOf('@');
+    const usernameEndIndex = atIndex === -1 ? data.username.length : atIndex;
+        
+    /* Appends the domain to the username */
+    data.username = data.username.substring(0, usernameEndIndex) + selectedDomain;
+    body = JSON.stringify(data);
   }
 
   httpSend.apply(this, arguments);
