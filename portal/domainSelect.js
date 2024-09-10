@@ -73,13 +73,18 @@ XMLHttpRequest.prototype.send = function(body) {
       selectedDomain = domainInput.value;
     }
 
-    /* Find the end index of the username */
-    const atIndex = data.username.indexOf('@');
-    const usernameEndIndex = atIndex === -1 ? data.username.length : atIndex;
-        
-    /* Appends the domain to the username */
-    data.username = data.username.substring(0, usernameEndIndex) + selectedDomain;
-    body = JSON.stringify(data);
+    if (selectedDomain !== '') {
+      /* Find the end index of the username */
+      const atIndex = data.username.indexOf('@');
+      const usernameEndIndex = atIndex === -1 ? data.username.length : atIndex;
+
+      console.log(atIndex);
+      console.log(usernameEndIndex);
+
+      /* Appends the domain to the username */
+      data.username = data.username.substring(0, usernameEndIndex) + selectedDomain;
+      body = JSON.stringify(data);
+    }
   }
 
   httpSend.apply(this, arguments);
