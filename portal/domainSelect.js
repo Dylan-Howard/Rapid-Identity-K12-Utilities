@@ -60,18 +60,36 @@ function appendDomainSelect() {
 appendDomainSelect();
 
 /* Updates http send request */
+function handleAuthError() {
+  /* Hides loading screen */
+  const loadingContainer = document.getElementById('loader-cntr');
+  loadingContainer.classList.add('hide');
+
+  /* Adds error message */
+  const authContainer = document.getElementById('authn-username-wrapper');
+  const errorContainer = document.createElement('p');
+  errorContainer.classList.add('error-message');
+  errorContainer.setAttribute('role', 'alert');
+
+  const errorText = document.createElement('span');
+  errorText.classList.add('cs-error');
+  errorText.textContent = 'Username is invalid'
+
+  errorContainer.appendChild(errorText);
+  authContainer.appendChild(errorContainer);
+}
+
 let selectedDomain = '';
 
 const httpSend = XMLHttpRequest.prototype.send;
-XMLHttpRequest.prototype.send = function(body) {
+XMLHttpRequest.prototype.send = async function(body) {
   const data = JSON.parse(body);
 
   if (data && data.username) {
+    /* Appends selected domain */
     const domainInput = document.getElementById('domain-select');
 
-    if (domainInput && domainInput.value != '') {
-      selectedDomain = domainInput.value;
-    }
+    selectedDomain = domainInput ? domainInput.value : '';
 
     if (selectedDomain !== '') {
       /* Find the end index of the username */
@@ -84,6 +102,39 @@ XMLHttpRequest.prototype.send = function(body) {
       /* Appends the domain to the username */
       data.username = data.username.substring(0, usernameEndIndex) + selectedDomain;
       body = JSON.stringify(data);
+    }
+
+    /* Check for username existance */
+    try {
+      const existsResponse = await fetch('https://warren.us003-rapididentity.com/api/rest/restpoints/PortalFunctions/exists', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ user: data.username }),
+      });
+
+      if (!existsResponse.ok) {
+        throw new Error(`Response status: ${existsResponse.status}`);
+      }
+
+      const { error, exists } = await existsResponse.json();
+
+      if (error) {
+        // throw new Error('Error checking username.');
+        console.error('Error checking username. Allowing passthrough.');
+      }
+
+      if (!exists) {
+        throw new Error('Authentication Error: Username is inavlid. No password will be accepted.');
+      }
+      
+    } catch (error) {
+      console.error(error.message);
+      this.abort();
+      handleAuthError();
+      
+      return;
     }
   }
 
