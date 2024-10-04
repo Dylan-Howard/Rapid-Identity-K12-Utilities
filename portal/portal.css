@@ -8,8 +8,8 @@
   --color-primary-2: #203446;
   --color-primary-3: #445963;
 
-  -color-alert-1: #DC5E41;
-  -color-alert-2: #FCF0EE;
+  --color-alert-1: #FDEDED;
+  --color-alert-2: #5f2120;
 }
 
 .cs-header,
@@ -56,6 +56,7 @@
 .cs-button {
   background-color: var(--color-primary-1);
   color: var(--color-background-surface);
+  border-radius: 4px;
   -webkit-transition: background-color .2s;
   -moz-transition: background-color .2s;
   -ms-transition: background-color .2s;
@@ -78,28 +79,34 @@
 #authn-qr-button:hover,
 #authn-claim-button:hover { background-color: var(--color-background-primary); }
 
-#authn-login-form .error-message { display: flex; }
-
-#authn-login-form .error-message .cs-error {
-  background-color: var(-color-alert-1);
-  border: 1px solid #DC5E41;
-  color: var(-color-alert-2);
-  padding: 2px 8px;
+.content .error-message,
+#authn-login-form .error-message {
+  background-color: var(--color-alert-1);
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 4px 10px;
   border-radius: 4px;
-  font-size: 14px;
 }
 
-@media (max-height: 540px) {
-  #authn-container {
-    display: flex;
-    justify-content: center;
-    flex-direction: row;
-    max-width: none;
-  }
-  }
+.content .error-message::before,
+#authn-login-form .error-message::before {
+  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' focusable='false' fill='%235f2120' aria-hidden='true' viewBox='0 0 24 24' data-testid='ErrorOutlineIcon'%3E%3Cpath d='M11 15h2v2h-2zm0-8h2v6h-2zm.99-5C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z'%3E%3C/path%3E%3C/svg%3E");
+  display: block;
+  height: 20px;
+  width: 20px;
+  margin-right: 8px;
+}
+
+.content .error-message .cs-error,
+#authn-login-form .error-message .cs-error {
+  color: var(--color-alert-2);
+}
+
+/* @media (max-height: 540px) {
   .cs-login-logo {
     height: 120px;
     width: 120px;
-    margin: auto 32px auto 0;
+    margin: auto 168px auto 0;
   }
-}
+} */
