@@ -1,7 +1,7 @@
 /**
  * Domain Select Addition - Adds domain select input to Rapid Identity portal
  * 
- * Updated: 08/22/2024
+ * Updated: 10/03/2024
  * Created: 06/12/2024
  * Author: Dylan Howard
 */
@@ -59,21 +59,31 @@ function appendDomainSelect() {
 }
 appendDomainSelect();
 
-/* Updates http send request */
-function handleAuthError() {
+/*
+* Updates http send request to validate sign in and append domanin
+*/
+function handleAuthError(message) {
   /* Hides loading screen */
   const loadingContainer = document.getElementById('loader-cntr');
   loadingContainer.classList.add('hide');
 
-  /* Adds error message */
+  /* Remove any existing error message */
   const authContainer = document.getElementById('authn-username-wrapper');
+  let existingError = authContainer.getElementsByClassName('error-message')[0];
+
+  if (existingError) {
+    existingError.remove();
+    existingError = null;
+  }
+
+  /* Adds error message */
   const errorContainer = document.createElement('p');
   errorContainer.classList.add('error-message');
   errorContainer.setAttribute('role', 'alert');
 
   const errorText = document.createElement('span');
   errorText.classList.add('cs-error');
-  errorText.textContent = 'Username is invalid'
+  errorText.textContent = message;
 
   errorContainer.appendChild(errorText);
   authContainer.appendChild(errorContainer);
@@ -96,9 +106,6 @@ XMLHttpRequest.prototype.send = async function(body) {
       const atIndex = data.username.indexOf('@');
       const usernameEndIndex = atIndex === -1 ? data.username.length : atIndex;
 
-      console.log(atIndex);
-      console.log(usernameEndIndex);
-
       /* Appends the domain to the username */
       data.username = data.username.substring(0, usernameEndIndex) + selectedDomain;
       body = JSON.stringify(data);
@@ -106,7 +113,7 @@ XMLHttpRequest.prototype.send = async function(body) {
 
     /* Check for username existance */
     try {
-      const existsResponse = await fetch('https://warren.us003-rapididentity.com/api/rest/restpoints/PortalFunctions/exists', {
+      const isValidResponse = await fetch('https://warren.us003-rapididentity.com/api/rest/restpoints/PortalFunctions/isValid', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -114,25 +121,25 @@ XMLHttpRequest.prototype.send = async function(body) {
         body: JSON.stringify({ user: data.username }),
       });
 
-      if (!existsResponse.ok) {
-        throw new Error(`Response status: ${existsResponse.status}`);
+      if (!isValidResponse.ok) {
+        throw new Error(`Response status: ${isValidResponse.status}`);
       }
 
-      const { error, exists } = await existsResponse.json();
+      const { error, isValid, message } = await isValidResponse.json();
 
       if (error) {
         // throw new Error('Error checking username.');
         console.error('Error checking username. Allowing passthrough.');
       }
 
-      if (!exists) {
-        throw new Error('Authentication Error: Username is inavlid. No password will be accepted.');
+      if (!isValid) {
+        throw new Error(message);
       }
       
     } catch (error) {
       console.error(error.message);
       this.abort();
-      handleAuthError();
+      handleAuthError(error.message);
       
       return;
     }
