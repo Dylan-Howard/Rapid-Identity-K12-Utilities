@@ -98,8 +98,7 @@ XMLHttpRequest.prototype.send = async function(body) {
   if (data && data.username) {
     /* Appends selected domain */
     const domainInput = document.getElementById('domain-select');
-
-    selectedDomain = domainInput ? domainInput.value : '';
+    selectedDomain = domainInput ? domainInput.value : selectedDomain;
 
     if (selectedDomain !== '') {
       /* Find the end index of the username */
