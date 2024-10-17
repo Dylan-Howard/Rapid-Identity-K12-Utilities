@@ -1,7 +1,7 @@
 /**
  * Domain Select Addition - Adds domain select input to Rapid Identity portal
  * 
- * Updated: 10/03/2024
+ * Updated: 10/14/2024
  * Created: 06/12/2024
  * Author: Dylan Howard
 */
@@ -127,7 +127,6 @@ XMLHttpRequest.prototype.send = async function(body) {
       const { error, isValid, message } = await isValidResponse.json();
 
       if (error) {
-        // throw new Error('Error checking username.');
         console.error('Error checking username. Allowing passthrough.');
       }
 
